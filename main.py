@@ -1,11 +1,18 @@
 from google.ads.googleads.client import GoogleAdsClient
-client = GoogleAdsClient.load_from_storage("/Users/shank/repos/googleads/google-ads.yaml")
-customer_id = "1574982141"
-_DEFAULT_PAGE_SIZE = 10
+import yaml
 
+client = GoogleAdsClient.load_from_storage("/Users/shank/repos/googleads/google-ads.yaml")
+
+# Load the account info from config file
+userConfig = None
+with open("user-config.yaml") as configFile:
+    userConfig = yaml.safe_load(configFile)
+customer_id = userConfig['customerId']
+
+# Create new conversino value rules
 conversion_value_rule_service = client.get_service("ConversionValueRuleService")
 
-for i in range(1):
+for i in range(5):
     conversion_value_rule_operation = client.get_type("ConversionValueRuleOperation")
     conversion_value_rule = conversion_value_rule_operation.create
     conversion_value_rule.action.value = 1
@@ -27,6 +34,7 @@ for i in range(1):
 
 
 # ga_service = client.get_service("GoogleAdsService")
+# _DEFAULT_PAGE_SIZE = 10
 
 # query = """
 #     SELECT id FROM conversionvaluerule"""
@@ -37,13 +45,4 @@ for i in range(1):
 # search_request.page_size = _DEFAULT_PAGE_SIZE
 
 # results = ga_service.search(request=search_request)
-
-# for row in results:
-#     print(
-#         f"Ad group with ID {row.ad_group.id} and name "
-#         f'"{row.ad_group.name}" was found in campaign with '
-#         f"ID {row.campaign.id}."
-#     )
-
-
 
